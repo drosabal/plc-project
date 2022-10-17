@@ -1,6 +1,10 @@
 package plc.project;
 
+import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The parser takes the sequence of tokens emitted by the lexer and turns that
@@ -84,7 +88,17 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Statement statement;
+        Ast.Expression left = parseExpression();
+        if (match("=")) {
+            statement = new Ast.Statement.Assignment(left, parseExpression());
+        } else {
+            statement = new Ast.Statement.Expression(left);
+        }
+        if (!match(";")) {
+            throwParseException("Invalid statement.");
+        }
+        return statement;
     }
 
     /**
@@ -145,35 +159,63 @@ public final class Parser {
      * Parses the {@code expression} rule.
      */
     public Ast.Expression parseExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        return parseLogicalExpression();
     }
 
     /**
      * Parses the {@code logical-expression} rule.
      */
     public Ast.Expression parseLogicalExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression logicalExpression = parseComparisonExpression();
+        while (peek("&&") || peek("||")) {
+            match(Token.Type.OPERATOR);
+            logicalExpression = new Ast.Expression.Binary(
+                    tokens.get(-1).getLiteral(), logicalExpression, parseComparisonExpression()
+            );
+        }
+        return logicalExpression;
     }
 
     /**
      * Parses the {@code equality-expression} rule.
      */
     public Ast.Expression parseComparisonExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression comparisonExpression = parseAdditiveExpression();
+        while (peek("<") || peek(">") || peek("==") || peek("!=")) {
+            match(Token.Type.OPERATOR);
+            comparisonExpression = new Ast.Expression.Binary(
+                    tokens.get(-1).getLiteral(), comparisonExpression, parseAdditiveExpression()
+            );
+        }
+        return comparisonExpression;
     }
 
     /**
      * Parses the {@code additive-expression} rule.
      */
     public Ast.Expression parseAdditiveExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression additiveExpression = parseMultiplicativeExpression();
+        while (peek("+") || peek("-")) {
+            match(Token.Type.OPERATOR);
+            additiveExpression = new Ast.Expression.Binary(
+                    tokens.get(-1).getLiteral(), additiveExpression, parseMultiplicativeExpression()
+            );
+        }
+        return additiveExpression;
     }
 
     /**
      * Parses the {@code multiplicative-expression} rule.
      */
     public Ast.Expression parseMultiplicativeExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression multiplicativeExpression = parsePrimaryExpression();
+        while (peek("*") || peek("/") || peek("^")) {
+            match(Token.Type.OPERATOR);
+            multiplicativeExpression = new Ast.Expression.Binary(
+                    tokens.get(-1).getLiteral(), multiplicativeExpression, parsePrimaryExpression()
+            );
+        }
+        return multiplicativeExpression;
     }
 
     /**
@@ -183,7 +225,94 @@ public final class Parser {
      * not strictly necessary.
      */
     public Ast.Expression parsePrimaryExpression() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression primaryExpression;
+        if (match("NIL")) {
+            primaryExpression = new Ast.Expression.Literal(null);
+        } else if (match("TRUE")) {
+            primaryExpression = new Ast.Expression.Literal(Boolean.TRUE);
+        } else if (match("FALSE")) {
+            primaryExpression = new Ast.Expression.Literal(Boolean.FALSE);
+        } else if (match(Token.Type.INTEGER)) {
+             primaryExpression = new Ast.Expression.Literal(
+                     BigInteger.valueOf(Long.parseLong(tokens.get(-1).getLiteral()))
+             );
+        } else if (match(Token.Type.DECIMAL)) {
+            primaryExpression = new Ast.Expression.Literal(
+                    BigDecimal.valueOf(Double.parseDouble(tokens.get(-1).getLiteral()))
+            );
+        } else if (match(Token.Type.CHARACTER)) {
+            Character c;
+            if (tokens.get(-1).getLiteral().charAt(1) == '\\') {
+                if (tokens.get(-1).getLiteral().charAt(2) == 'b') {
+                    c = '\b';
+                } else if (tokens.get(-1).getLiteral().charAt(2) == 'n') {
+                    c = '\n';
+                } else if (tokens.get(-1).getLiteral().charAt(2) == 'r') {
+                    c = '\r';
+                } else if (tokens.get(-1).getLiteral().charAt(2) == 't') {
+                    c = '\t';
+                } else if (tokens.get(-1).getLiteral().charAt(2) == '\'') {
+                    c = '\'';
+                } else if (tokens.get(-1).getLiteral().charAt(2) == '\"') {
+                    c = '\"';
+                } else {
+                    c = '\\';
+                }
+            } else {
+                c = tokens.get(-1).getLiteral().charAt(1);
+            }
+            primaryExpression = new Ast.Expression.Literal(c);
+        } else if (match(Token.Type.STRING)) {
+            String s = tokens.get(-1).getLiteral();
+            s = s.substring(1, s.length() - 1);
+            s = s.replaceAll("\\\\b", "\b");
+            s = s.replaceAll("\\\\n", "\n");
+            s = s.replaceAll("\\\\r", "\r");
+            s = s.replaceAll("\\\\t", "\t");
+            s = s.replaceAll("\\\\'", "\'");
+            s = s.replaceAll("\\\\\"", "\"");
+            s = s.replaceAll("\\\\\\\\", "\\");
+            primaryExpression = new Ast.Expression.Literal(s);
+        } else if (match("(")) {
+            primaryExpression = new Ast.Expression.Group(parseExpression());
+            if (!match(")")) {
+                throwParseException("Invalid primary expression.");
+            }
+        } else if (match(Token.Type.IDENTIFIER)) {
+            String name = tokens.get(-1).getLiteral();
+            if (match("(")) {
+                List<Ast.Expression> arguments = new ArrayList<>();
+                if (!match(")")) {
+                    arguments.add(parseExpression());
+                    while (match(",")) {
+                        arguments.add(parseExpression());
+                    }
+                    if (!match(")")) {
+                        throwParseException("Invalid primary expression.");
+                    }
+                }
+                primaryExpression = new Ast.Expression.Function(name, arguments);
+            } else if (match("[")) {
+                primaryExpression = new Ast.Expression.Access(Optional.of(parseExpression()), name);
+                if (!match("]")) {
+                    throwParseException("Invalid primary expression.");
+                }
+            } else {
+                primaryExpression = new Ast.Expression.Access(Optional.empty(), name);
+            }
+        } else {
+            primaryExpression = null;
+            throwParseException("Invalid primary expression.");
+        }
+        return primaryExpression;
+    }
+
+    private void throwParseException(String message) throws ParseException {
+        if (tokens.has(0)) {
+            throw new ParseException(message, tokens.get(0).getIndex());
+        } else {
+            throw new ParseException(message, tokens.get(-1).getIndex() + tokens.get(-1).getLiteral().length());
+        }
     }
 
     /**
