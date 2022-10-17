@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Implemented parseExpression and related functions in Parser.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed whitespace regex in Lexer.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +60,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.Mappings&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.LexerTests">
+  <component name="RunManager" selected="JUnit.ParserExpressionTests">
     <configuration name="LexerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
@@ -142,8 +141,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.LexerTests" />
         <item itemvalue="JUnit.ParserExpressionTests" />
+        <item itemvalue="JUnit.LexerTests" />
         <item itemvalue="JUnit.ParserExpressionTests.testFunctionExpression" />
         <item itemvalue="JUnit.ParserExpressionTests.testAccessExpression" />
         <item itemvalue="JUnit.ParserExpressionTests.testBinaryExpression" />
@@ -201,7 +200,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665980210900</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixed whitespace regex in Lexer.">
+      <created>1665982952785</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1665982952785</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -249,6 +255,7 @@
     <MESSAGE value="Added Ast, Parser, and ParserExpressionTests." />
     <MESSAGE value="Implemented peek and match in Parser." />
     <MESSAGE value="Implemented parseExpression and related functions in Parser." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented parseExpression and related functions in Parser." />
+    <MESSAGE value="Fixed whitespace regex in Lexer." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed whitespace regex in Lexer." />
   </component>
 </project>
