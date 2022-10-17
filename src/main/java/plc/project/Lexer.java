@@ -30,7 +30,7 @@ public final class Lexer {
     public List<Token> lex() {
         List<Token> tokens = new ArrayList<>();
         while (chars.has(0)) {
-            if (peek("\\s")) {
+            if (peek("[ \\x08\\n\\r\\t]")) {
                 chars.advance();
                 chars.skip();
             } else {
