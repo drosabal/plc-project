@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Added ParserTests.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Implemented parseStatement and related functions in Parser.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
@@ -93,7 +93,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ParserTests.testExample1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -103,7 +103,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Binary)" />
+      <option name="METHOD_NAME" value="testExample1" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -125,7 +125,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testGroupExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ParserTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -135,7 +135,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testGroupExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Group)" />
+      <option name="METHOD_NAME" value="testSource(java.lang.String,java.util.List,plc.project.Ast$Source)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -144,10 +144,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.ParserTests" />
+        <item itemvalue="JUnit.ParserTests.testExample1" />
+        <item itemvalue="JUnit.ParserTests.testSource" />
         <item itemvalue="JUnit.ParserTests.testFunctionExpression" />
         <item itemvalue="JUnit.ParserTests.testAccessExpression" />
-        <item itemvalue="JUnit.ParserTests.testBinaryExpression" />
-        <item itemvalue="JUnit.ParserTests.testGroupExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -216,7 +216,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666043589162</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Implemented parseStatement and related functions in Parser.">
+      <created>1666051780951</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1666051780951</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -266,6 +273,7 @@
     <MESSAGE value="Implemented parseExpression and related functions in Parser." />
     <MESSAGE value="Fixed whitespace regex in Lexer." />
     <MESSAGE value="Added ParserTests." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added ParserTests." />
+    <MESSAGE value="Implemented parseStatement and related functions in Parser." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented parseStatement and related functions in Parser." />
   </component>
 </project>

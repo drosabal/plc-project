@@ -31,7 +31,18 @@ public final class Parser {
      * Parses the {@code source} rule.
      */
     public Ast.Source parseSource() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        List<Ast.Global> globals = new ArrayList<>();
+        List<Ast.Function> functions = new ArrayList<>();
+        while(peek("LIST") || peek("VAR") || peek("VAL")) {
+            globals.add(parseGlobal());
+        }
+        while(match("FUN")) {
+            functions.add(parseFunction());
+        }
+        if (tokens.has(0)) {
+            throwParseException("Not a global or function.");
+        }
+        return new Ast.Source(globals, functions);
     }
 
     /**
@@ -39,7 +50,19 @@ public final class Parser {
      * next tokens start a global, aka {@code LIST|VAL|VAR}.
      */
     public Ast.Global parseGlobal() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Global global;
+        if (match("LIST")) {
+            global = parseList();
+        } else if (match("VAR")) {
+            global = parseMutable();
+        } else {
+            match("VAL");
+            global = parseImmutable();
+        }
+        if (!match(";")) {
+            throwParseException("Invalid global.");
+        }
+        return global;
     }
 
     /**
@@ -47,7 +70,25 @@ public final class Parser {
      * next token declares a list, aka {@code LIST}.
      */
     public Ast.Global parseList() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        List<Ast.Expression> values = new ArrayList<>();
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid list.");
+        }
+        String name = tokens.get(-1).getLiteral();
+        if (!match("=")) {
+            throwParseException("Invalid list.");
+        }
+        if (!match("[")) {
+            throwParseException("Invalid list.");
+        }
+        values.add(parseExpression());
+        while (match(",")) {
+            values.add(parseExpression());
+        }
+        if (!match("]")) {
+            throwParseException("Invalid list.");
+        }
+        return new Ast.Global(name, true, Optional.of(new Ast.Expression.PlcList(values)));
     }
 
     /**
@@ -55,7 +96,17 @@ public final class Parser {
      * next token declares a mutable global variable, aka {@code VAR}.
      */
     public Ast.Global parseMutable() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Global mutable;
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid mutable.");
+        }
+        String name = tokens.get(-1).getLiteral();
+        if (match("=")) {
+            mutable = new Ast.Global(name, true, Optional.of(parseExpression()));
+        } else {
+            mutable = new Ast.Global(name, true, Optional.empty());
+        }
+        return mutable;
     }
 
     /**
@@ -63,7 +114,14 @@ public final class Parser {
      * next token declares an immutable global variable, aka {@code VAL}.
      */
     public Ast.Global parseImmutable() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid immutable.");
+        }
+        String name = tokens.get(-1).getLiteral();
+        if (!match("=")) {
+            throwParseException("Invalid immutable.");
+        }
+        return new Ast.Global(name, false, Optional.of(parseExpression()));
     }
 
     /**
@@ -71,7 +129,35 @@ public final class Parser {
      * next tokens start a method, aka {@code FUN}.
      */
     public Ast.Function parseFunction() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        List<String> parameters = new ArrayList<>();
+        List<Ast.Statement> statements;
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid function.");
+        }
+        String name = tokens.get(-1).getLiteral();
+        if (!match("(")) {
+            throwParseException("Invalid function.");
+        }
+        if (match(Token.Type.IDENTIFIER)) {
+            parameters.add(tokens.get(-1).getLiteral());
+            while (match(",")) {
+                if (!match(Token.Type.IDENTIFIER)) {
+                    throwParseException("Invalid function.");
+                }
+                parameters.add(tokens.get(-1).getLiteral());
+            }
+        }
+        if (!match(")")) {
+            throwParseException("Invalid function.");
+        }
+        if (!match("DO")) {
+            throwParseException("Invalid function.");
+        }
+        statements = parseBlock();
+        if (!match("END")) {
+            throwParseException("Invalid function.");
+        }
+        return new Ast.Function(name, parameters, statements);
     }
 
     /**
