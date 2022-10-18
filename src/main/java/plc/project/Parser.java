@@ -79,7 +79,11 @@ public final class Parser {
      * preceding token indicates the opening a block.
      */
     public List<Ast.Statement> parseBlock() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        List<Ast.Statement> block = new ArrayList<>();
+        while (!(peek("END") || peek("ELSE") || peek("CASE") || peek("DEFAULT"))) {
+            block.add(parseStatement());
+        }
+        return block;
     }
 
     /**
@@ -89,14 +93,26 @@ public final class Parser {
      */
     public Ast.Statement parseStatement() throws ParseException {
         Ast.Statement statement;
-        Ast.Expression left = parseExpression();
-        if (match("=")) {
-            statement = new Ast.Statement.Assignment(left, parseExpression());
+        if (match("LET")) {
+            statement = parseDeclarationStatement();
+        } else if (match("SWITCH")) {
+            statement = parseSwitchStatement();
+        } else if (match("IF")) {
+            statement = parseIfStatement();
+        } else if (match("WHILE")) {
+            statement = parseWhileStatement();
+        } else if (match("RETURN")) {
+            statement = parseReturnStatement();
         } else {
-            statement = new Ast.Statement.Expression(left);
-        }
-        if (!match(";")) {
-            throwParseException("Invalid statement.");
+            Ast.Expression left = parseExpression();
+            if (match("=")) {
+                statement = new Ast.Statement.Assignment(left, parseExpression());
+            } else {
+                statement = new Ast.Statement.Expression(left);
+            }
+            if (!match(";")) {
+                throwParseException("Invalid statement.");
+            }
         }
         return statement;
     }
@@ -107,7 +123,20 @@ public final class Parser {
      * statement, aka {@code LET}.
      */
     public Ast.Statement.Declaration parseDeclarationStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Statement.Declaration declarationStatement;
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid declaration statement.");
+        }
+        String name = tokens.get(-1).getLiteral();
+        if (match("=")) {
+            declarationStatement = new Ast.Statement.Declaration(name, Optional.of(parseExpression()));
+        } else {
+            declarationStatement = new Ast.Statement.Declaration(name, Optional.empty());
+        }
+        if (!match(";")) {
+            throwParseException("Invalid declaration statement.");
+        }
+        return declarationStatement;
     }
 
     /**
@@ -116,7 +145,20 @@ public final class Parser {
      * {@code IF}.
      */
     public Ast.Statement.If parseIfStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression condition = parseExpression();
+        List<Ast.Statement> thenStatements;
+        List<Ast.Statement> elseStatements = new ArrayList<>();
+        if (!match("DO")) {
+            throwParseException("Invalid if statement.");
+        }
+        thenStatements = parseBlock();
+        if (match("ELSE")) {
+            elseStatements = parseBlock();
+        }
+        if (!match("END")) {
+            throwParseException("Invalid if statement.");
+        }
+        return new Ast.Statement.If(condition, thenStatements, elseStatements);
     }
 
     /**
@@ -125,7 +167,19 @@ public final class Parser {
      * {@code SWITCH}.
      */
     public Ast.Statement.Switch parseSwitchStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression condition = parseExpression();
+        List<Ast.Statement.Case> cases = new ArrayList<>();
+        while (match("CASE")) {
+            cases.add(parseCaseStatement());
+        }
+        if (!match("DEFAULT")) {
+            throwParseException("Invalid switch statement.");
+        }
+        cases.add(new Ast.Statement.Case(Optional.empty(), parseBlock()));
+        if (!match("END")) {
+            throwParseException("Invalid switch statement.");
+        }
+        return new Ast.Statement.Switch(condition, cases);
     }
 
     /**
@@ -134,7 +188,13 @@ public final class Parser {
      * default block of a switch statement, aka {@code CASE} or {@code DEFAULT}.
      */
     public Ast.Statement.Case parseCaseStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression value = parseExpression();
+        List<Ast.Statement> statements;
+        if (!match(":")) {
+            throwParseException("Invalid case statement.");
+        }
+        statements = parseBlock();
+        return new Ast.Statement.Case(Optional.of(value), statements);
     }
 
     /**
@@ -143,7 +203,16 @@ public final class Parser {
      * {@code WHILE}.
      */
     public Ast.Statement.While parseWhileStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression condition = parseExpression();
+        List<Ast.Statement> statements;
+        if (!match("DO")) {
+            throwParseException("Invalid while statement.");
+        }
+        statements = parseBlock();
+        if (!match("END")) {
+            throwParseException("Invalid while statement.");
+        }
+        return new Ast.Statement.While(condition, statements);
     }
 
     /**
@@ -152,7 +221,11 @@ public final class Parser {
      * {@code RETURN}.
      */
     public Ast.Statement.Return parseReturnStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression value = parseExpression();
+        if (!match(";")) {
+            throwParseException("Invalid return statement.");
+        }
+        return new Ast.Statement.Return(value);
     }
 
     /**
