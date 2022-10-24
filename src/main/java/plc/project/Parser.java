@@ -392,13 +392,9 @@ public final class Parser {
         } else if (match("FALSE")) {
             primaryExpression = new Ast.Expression.Literal(Boolean.FALSE);
         } else if (match(Token.Type.INTEGER)) {
-             primaryExpression = new Ast.Expression.Literal(
-                     BigInteger.valueOf(Long.parseLong(tokens.get(-1).getLiteral()))
-             );
+             primaryExpression = new Ast.Expression.Literal(new BigInteger(tokens.get(-1).getLiteral()));
         } else if (match(Token.Type.DECIMAL)) {
-            primaryExpression = new Ast.Expression.Literal(
-                    BigDecimal.valueOf(Double.parseDouble(tokens.get(-1).getLiteral()))
-            );
+            primaryExpression = new Ast.Expression.Literal(new BigDecimal(tokens.get(-1).getLiteral()));
         } else if (match(Token.Type.CHARACTER)) {
             Character c;
             if (tokens.get(-1).getLiteral().charAt(1) == '\\') {
@@ -430,7 +426,7 @@ public final class Parser {
             s = s.replaceAll("\\\\t", "\t");
             s = s.replaceAll("\\\\'", "\'");
             s = s.replaceAll("\\\\\"", "\"");
-            s = s.replaceAll("\\\\\\\\", "\\");
+            s = s.replaceAll("\\\\\\\\", "\\\\");
             primaryExpression = new Ast.Expression.Literal(s);
         } else if (match("(")) {
             primaryExpression = new Ast.Expression.Group(parseExpression());

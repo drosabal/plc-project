@@ -410,6 +410,30 @@ final class ParserTests {
                 Arguments.of("Escape Character",
                         Arrays.asList(new Token(Token.Type.STRING, "\"Hello,\\nWorld!\"", 0)),
                         new Ast.Expression.Literal("Hello,\nWorld!")
+                ),
+                Arguments.of("Character Escape Newline",
+                        Arrays.asList(new Token(Token.Type.CHARACTER, "'\\n'", 0)),
+                        new Ast.Expression.Literal('\n')
+                ),
+                Arguments.of("Character Escape Backslash",
+                        Arrays.asList(new Token(Token.Type.CHARACTER, "'\\\\'", 0)),
+                        new Ast.Expression.Literal('\\')
+                ),
+                Arguments.of("String Escape Newline",
+                        Arrays.asList(new Token(Token.Type.STRING, "\"\\n\"", 0)),
+                        new Ast.Expression.Literal("\n")
+                ),
+                Arguments.of("String Escape Backslash",
+                        Arrays.asList(new Token(Token.Type.STRING, "\"\\\\\"", 0)),
+                        new Ast.Expression.Literal("\\")
+                ),
+                Arguments.of("Big Integer",
+                        Arrays.asList(new Token(Token.Type.INTEGER, "123456789123456789123456789", 0)),
+                        new Ast.Expression.Literal(new BigInteger("123456789123456789123456789"))
+                ),
+                Arguments.of("Big Decimal",
+                        Arrays.asList(new Token(Token.Type.DECIMAL, "123456789123456789123456789.9999999", 0)),
+                        new Ast.Expression.Literal(new BigDecimal("123456789123456789123456789.9999999"))
                 )
         );
     }
