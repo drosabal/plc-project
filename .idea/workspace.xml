@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Added test cases to ParserTests.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" afterDir="false" />
-    </list>
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed parsing for integers, decimals, and string escapes." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -238,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666149019638</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fixed parsing for integers, decimals, and string escapes.">
+      <created>1666587052977</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1666587052977</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -291,6 +294,7 @@
     <MESSAGE value="Implemented parseStatement and related functions in Parser." />
     <MESSAGE value="Implemented remaining Parser functions." />
     <MESSAGE value="Added test cases to ParserTests." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added test cases to ParserTests." />
+    <MESSAGE value="Fixed parsing for integers, decimals, and string escapes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed parsing for integers, decimals, and string escapes." />
   </component>
 </project>
