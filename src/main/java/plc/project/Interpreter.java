@@ -17,6 +17,36 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             System.out.println(args.get(0).getValue());
             return Environment.NIL;
         });
+        //TODO: Check code below (implemented in lecture)
+        /*
+        scope.defineFunction("logarithm", 1, args -> {
+            if (!(args.get(0).getValue() instanceof BigDecimal)) {
+                throw new RuntimeException("Expected a BigDecimal, received "+
+                        args.get(0).getValue().getClass().getName() + ".");
+            }
+            BigDecimal bd1 = (BigDecimal)  args.get(0).getValue();
+            BigDecimal bd2 = requireType(BigDecimal.class, Environment.create(args.get(0).getValue()));
+            BigDecimal result = BigDecimal.valueOf(Math.log(bd2.doubleValue()));
+            return Environment.create(result);
+        });
+        scope.defineFunction("converter", 2, args -> {
+            String number = new String();
+            int i, n = 0;
+            ArrayList<BigInteger> quotients = new ArrayList<>();
+            ArrayList<BigInteger> remainders = new ArrayList<>();
+            BigInteger base10 = requireType(BigInteger.class, Environment.create(args.get(0).getValue()));
+            BigInteger base = requireType(BigInteger.class, Environment.create(args.get(1).getValue()));
+            quotients.add(base10);
+            do {
+                quotients.add(quotients.get(n).divide(base));
+                remainders.add(quotients.get(n).subtract(quotients.get(n + 1).multiply(base)));
+                n++;
+            } while (quotients.get(n).compareTo(BigInteger.ZERO) > 0);
+            for (i = 0; i < remainders.size(); i++) {
+                number = remainders.get(i).toString() + number;
+            }
+        });
+        */
     }
 
     public Scope getScope() {
@@ -25,87 +55,313 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Source ast) {
-        throw new UnsupportedOperationException(); //TODO
+        for (Ast.Global global : ast.getGlobals()) {
+            visit(global);
+        }
+        for (Ast.Function function : ast.getFunctions()) {
+            visit(function);
+        }
+        return scope.lookupFunction("main", 0).invoke(new ArrayList<Environment.PlcObject>());
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Global ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (ast.getValue().isPresent()) {
+            scope.defineVariable(ast.getName(), ast.getMutable(), visit(ast.getValue().get()));
+        } else {
+            scope.defineVariable(ast.getName(), ast.getMutable(), Environment.NIL);
+        }
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        scope.defineFunction(ast.getName(), ast.getParameters().size(), args -> {
+            try {
+                scope = new Scope(scope);
+                for (int i = 0; i < ast.getParameters().size(); i++) {
+                    scope.defineVariable(ast.getParameters().get(i), true, args.get(i));
+                }
+                for (Ast.Statement stmt : ast.getStatements()) {
+                    visit(stmt);
+                }
+                return Environment.NIL;
+            } catch (Return r) {
+                return r.value;
+            } finally {
+                scope = scope.getParent();
+            }
+        });
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Expression ast) {
-        throw new UnsupportedOperationException(); //TODO
+        visit(ast.getExpression());
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Declaration ast) {
-        throw new UnsupportedOperationException(); //TODO (in lecture)
+        if (ast.getValue().isPresent()) {
+            scope.defineVariable(ast.getName(), true, visit(ast.getValue().get()));
+        } else {
+            scope.defineVariable(ast.getName(), true, Environment.NIL);
+        }
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Assignment ast) {
-        throw new UnsupportedOperationException(); //TODO
-    }
+        if (ast.getReceiver() instanceof Ast.Expression.Access) {
+            Ast.Expression.Access receiver = (Ast.Expression.Access) ast.getReceiver();
+            if (scope.lookupVariable(receiver.getName()).getMutable()) {
+                if (receiver.getOffset().isPresent()) {
+                    List<Object> vals = requireType(List.class, scope.lookupVariable(receiver.getName()).getValue());
+                    BigInteger offset = requireType(BigInteger.class, visit(receiver.getOffset().get()));
+                    vals.set(offset.intValueExact(), visit(ast.getValue()).getValue());
+                    scope.lookupVariable(receiver.getName()).setValue(Environment.create(vals));
+                } else {
+                    scope.lookupVariable(receiver.getName()).setValue(visit(ast.getValue()));
+                }
+                return Environment.NIL;
+            } else {
+                throw new RuntimeException("Invalid assignment statement.");
+            }
+        } else {
+            throw new RuntimeException("Invalid assignment statement.");
+        }
+    } //TODO: ~
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.If ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (requireType(Boolean.class, visit(ast.getCondition()))) {
+            try {
+                scope = new Scope(scope);
+                for (Ast.Statement stmt : ast.getThenStatements()) {
+                    visit(stmt);
+                }
+            } finally {
+                scope = scope.getParent();
+            }
+        } else {
+            try {
+                scope = new Scope(scope);
+                for (Ast.Statement stmt : ast.getElseStatements()) {
+                    visit(stmt);
+                }
+            } finally {
+                scope = scope.getParent();
+            }
+        }
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Switch ast) {
-        throw new UnsupportedOperationException(); //TODO
+        boolean caseTaken = false;
+        for (Ast.Statement.Case c : ast.getCases()) {
+            try {
+                scope = new Scope(scope);
+                if (c.getValue().isPresent()) {
+                    if (visit(c.getValue().get()).getValue().equals(visit(ast.getCondition()).getValue())) {
+                        visit(c);
+                        caseTaken = true;
+                    }
+                }
+            } finally {
+                scope = scope.getParent();
+            }
+        }
+        if (!caseTaken) {
+            for (Ast.Statement.Case c : ast.getCases()) {
+                try {
+                    scope = new Scope(scope);
+                    if (!c.getValue().isPresent()) {
+                        visit(c);
+                    }
+                } finally {
+                    scope = scope.getParent();
+                }
+            }
+        }
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Case ast) {
-        throw new UnsupportedOperationException(); //TODO
+        for (Ast.Statement stmt : ast.getStatements()) {
+            visit(stmt);
+        }
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.While ast) {
-        throw new UnsupportedOperationException(); //TODO (in lecture)
+        while (requireType(Boolean.class, visit(ast.getCondition()))) {
+            try {
+                scope = new Scope(scope);
+                for (Ast.Statement stmt : ast.getStatements()) {
+                    visit(stmt);
+                }
+            } finally {
+                scope = scope.getParent();
+            }
+        }
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        throw new Return(visit(ast.getValue()));
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Literal ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (ast.getLiteral() == null) {
+            return Environment.NIL;
+        } else {
+            return Environment.create(ast.getLiteral());
+        }
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Group ast) {
-        throw new UnsupportedOperationException(); //TODO
+        return visit(ast.getExpression());
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Binary ast) {
-        throw new UnsupportedOperationException(); //TODO
-    }
+        Environment.PlcObject left = visit(ast.getLeft());
+        switch (ast.getOperator()) {
+            case "&&": {
+                Boolean l = requireType(Boolean.class, left);
+                return Environment.create(l && requireType(Boolean.class, visit(ast.getRight())));
+            } case "||": {
+                Boolean l = requireType(Boolean.class, left);
+                return Environment.create(l || requireType(Boolean.class, visit(ast.getRight())));
+            } case "<": {
+                Environment.PlcObject right = visit(ast.getRight());
+                if (left.getValue() instanceof Comparable) {
+                    Comparable<Object> l = requireType(Comparable.class, left);
+                    Object r = requireType(left.getValue().getClass(), right);
+                    return Environment.create(l.compareTo(r) < 0);
+                } else {
+                    throw new RuntimeException("Invalid binary operation.");
+                }
+            } case ">": {
+                Environment.PlcObject right = visit(ast.getRight());
+                if (left.getValue() instanceof Comparable) {
+                    Comparable<Object> l = requireType(Comparable.class, left);
+                    Object r = requireType(left.getValue().getClass(), right);
+                    return Environment.create(l.compareTo(r) > 0);
+                } else {
+                    throw new RuntimeException("Invalid binary operation.");
+                }
+            } case "==": {
+                Environment.PlcObject right = visit(ast.getRight());
+                return Environment.create(java.util.Objects.equals(left.getValue(), right.getValue()));
+            } case "!=": {
+                Environment.PlcObject right = visit(ast.getRight());
+                return Environment.create(!java.util.Objects.equals(left.getValue(), right.getValue()));
+            } case "+": {
+                Environment.PlcObject right = visit(ast.getRight());
+                if (left.getValue() instanceof BigInteger) {
+                    BigInteger l = requireType(BigInteger.class, left);
+                    BigInteger r = requireType(BigInteger.class, right);
+                    return Environment.create(l.add(r));
+                } else if (left.getValue() instanceof BigDecimal) {
+                    BigDecimal l = requireType(BigDecimal.class, left);
+                    BigDecimal r = requireType(BigDecimal.class, right);
+                    return Environment.create(l.add(r));
+                } else if (left.getValue() instanceof String) {
+                    String l = requireType(String.class, left);
+                    String r = requireType(String.class, right);
+                    return Environment.create(l + r);
+                } else {
+                    throw new RuntimeException("Invalid binary operation.");
+                }
+            } case "-": {
+                Environment.PlcObject right = visit(ast.getRight());
+                if (left.getValue() instanceof BigInteger) {
+                    BigInteger l = requireType(BigInteger.class, left);
+                    BigInteger r = requireType(BigInteger.class, right);
+                    return Environment.create(l.subtract(r));
+                } else if (left.getValue() instanceof BigDecimal) {
+                    BigDecimal l = requireType(BigDecimal.class, left);
+                    BigDecimal r = requireType(BigDecimal.class, right);
+                    return Environment.create(l.subtract(r));
+                } else {
+                    throw new RuntimeException("Invalid binary operation.");
+                }
+            } case "*": {
+                Environment.PlcObject right = visit(ast.getRight());
+                if (left.getValue() instanceof BigInteger) {
+                    BigInteger l = requireType(BigInteger.class, left);
+                    BigInteger r = requireType(BigInteger.class, right);
+                    return Environment.create(l.multiply(r));
+                } else if (left.getValue() instanceof BigDecimal) {
+                    BigDecimal l = requireType(BigDecimal.class, left);
+                    BigDecimal r = requireType(BigDecimal.class, right);
+                    return Environment.create(l.multiply(r));
+                } else {
+                    throw new RuntimeException("Invalid binary operation.");
+                }
+            } case "/": {
+                Environment.PlcObject right = visit(ast.getRight());
+                if (left.getValue() instanceof BigInteger) {
+                    BigInteger l = requireType(BigInteger.class, left);
+                    BigInteger r = requireType(BigInteger.class, right);
+                    return Environment.create(l.divide(r));
+                } else if (left.getValue() instanceof BigDecimal) {
+                    BigDecimal l = requireType(BigDecimal.class, left);
+                    BigDecimal r = requireType(BigDecimal.class, right);
+                    return Environment.create(l.divide(r, RoundingMode.HALF_EVEN));
+                } else {
+                    throw new RuntimeException("Invalid binary operation.");
+                }
+            } case "^": {
+                Environment.PlcObject right = visit(ast.getRight());
+                if (left.getValue() instanceof BigInteger) {
+                    BigInteger l = requireType(BigInteger.class, left);
+                    BigInteger r = requireType(BigInteger.class, right);
+                    return Environment.create(l.pow(r.intValueExact()));
+                } else {
+                    throw new RuntimeException("Invalid binary operation.");
+                }
+            } default: {
+                throw new RuntimeException("Invalid binary operation.");
+            }
+        }
+    } //TODO: check divide by zero, fix ^ operation
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
-        throw new UnsupportedOperationException(); //TODO
-    }
+        if (ast.getOffset().isPresent()) {
+            List<Object> vals = requireType(List.class, scope.lookupVariable(ast.getName()).getValue());
+            BigInteger offset = requireType(BigInteger.class, visit(ast.getOffset().get()));
+            return Environment.create(vals.get(offset.intValueExact()));
+        } else {
+            return scope.lookupVariable(ast.getName()).getValue();
+        }
+    } //TODO: ~
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        List<Environment.PlcObject> args = new ArrayList<>();
+        for (Ast.Expression expr : ast.getArguments()) {
+            args.add(visit(expr));
+        }
+        return scope.lookupFunction(ast.getName(), ast.getArguments().size()).invoke(args);
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.PlcList ast) {
-        throw new UnsupportedOperationException(); //TODO
+        List<Object> list = new ArrayList<>();
+        for (Ast.Expression expr : ast.getValues()) {
+            list.add(visit(expr).getValue());
+        }
+        return Environment.create(list);
     }
 
     /**
