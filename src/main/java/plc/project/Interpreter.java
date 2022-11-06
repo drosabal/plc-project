@@ -325,7 +325,16 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 if (left.getValue() instanceof BigInteger) {
                     BigInteger l = requireType(BigInteger.class, left);
                     BigInteger r = requireType(BigInteger.class, right);
-                    return Environment.create(l.pow(r.intValueExact()));
+                    if (r.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
+                        BigInteger remainder = r.subtract(BigInteger.valueOf(Integer.MAX_VALUE));
+                        BigInteger n = l.pow(Integer.MAX_VALUE);
+                        for (BigInteger i = BigInteger.ZERO; i.compareTo(remainder) < 0; i = i.add(BigInteger.ONE)) {
+                            n = n.multiply(n);
+                        }
+                        return Environment.create(n);
+                    } else {
+                        return Environment.create(l.pow(r.intValueExact()));
+                    }
                 } else {
                     throw new RuntimeException("Invalid binary operation.");
                 }
@@ -333,7 +342,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 throw new RuntimeException("Invalid binary operation.");
             }
         }
-    } //TODO: check divide by zero, fix ^ operation
+    }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
