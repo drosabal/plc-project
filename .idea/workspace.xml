@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Implemented Interpreter.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed exponent operation in Interpreter.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" afterDir="false" />
@@ -62,7 +62,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.InterpreterTests.testBinaryExpression">
+  <component name="RunManager" selected="JUnit.InterpreterTests">
     <configuration name="InterpreterTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
@@ -94,7 +94,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testListAccessExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testLogarithmExpressionError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -104,13 +104,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testListAccessExpression" />
+      <option name="METHOD_NAME" value="testLogarithmExpressionError" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testListAssignmentStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testLogarithmExpressionStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -120,13 +120,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testListAssignmentStatement" />
+      <option name="METHOD_NAME" value="testLogarithmExpressionStatement" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testPlcList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -136,7 +136,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testPlcList" />
+      <option name="METHOD_NAME" value="testSource(java.lang.String,plc.project.Ast$Source,java.lang.Object)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -144,11 +144,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.InterpreterTests.testBinaryExpression" />
         <item itemvalue="JUnit.InterpreterTests" />
-        <item itemvalue="JUnit.InterpreterTests.testListAssignmentStatement" />
-        <item itemvalue="JUnit.InterpreterTests.testListAccessExpression" />
-        <item itemvalue="JUnit.InterpreterTests.testPlcList" />
+        <item itemvalue="JUnit.InterpreterTests.testSource" />
+        <item itemvalue="JUnit.InterpreterTests.testBinaryExpression" />
+        <item itemvalue="JUnit.InterpreterTests.testLogarithmExpressionError" />
+        <item itemvalue="JUnit.InterpreterTests.testLogarithmExpressionStatement" />
       </list>
     </recent_temporary>
   </component>
@@ -259,7 +259,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667706946207</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Fixed exponent operation in Interpreter.">
+      <created>1667711495020</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1667711495020</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -315,6 +322,7 @@
     <MESSAGE value="Fixed parsing for integers, decimals, and string escapes." />
     <MESSAGE value="Updated Ast and added new files for the Interpreter." />
     <MESSAGE value="Implemented Interpreter." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Interpreter." />
+    <MESSAGE value="Fixed exponent operation in Interpreter." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed exponent operation in Interpreter." />
   </component>
 </project>

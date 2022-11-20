@@ -43,9 +43,41 @@ final class InterpreterTests {
                         Arrays.asList(new Ast.Function("main", Arrays.asList(), Arrays.asList(
                                 new Ast.Statement.Expression(new Ast.Expression.Binary("+",
                                         new Ast.Expression.Access(Optional.empty(), "x"),
-                                        new Ast.Expression.Access(Optional.empty(), "y")                                ))
+                                        new Ast.Expression.Access(Optional.empty(), "y")))
                         )))
-                ), Environment.NIL.getValue())
+                ), Environment.NIL.getValue()),
+                // VAR x = 1;
+                // VAR y = 2;
+                // VAR z = 3;
+                // FUN f(z) DO
+                //     RETURN x + y + z;
+                // END
+                // FUN main() DO
+                //     LET y = 4;
+                //     RETURN f(5);
+                // END
+                Arguments.of("Function Scope", new Ast.Source(
+                        Arrays.asList(
+                                new Ast.Global("x", true, Optional.of(new Ast.Expression.Literal(BigInteger.ONE))),
+                                new Ast.Global("y", true, Optional.of(new Ast.Expression.Literal(BigInteger.valueOf(2)))),
+                                new Ast.Global("z", true, Optional.of(new Ast.Expression.Literal(BigInteger.valueOf(3))))
+                        ),
+                        Arrays.asList(
+                                new Ast.Function("f", Arrays.asList("z"), Arrays.asList(
+                                        new Ast.Statement.Return(new Ast.Expression.Binary("+",
+                                                new Ast.Expression.Binary("+",
+                                                        new Ast.Expression.Access(Optional.empty(), "x"),
+                                                        new Ast.Expression.Access(Optional.empty(), "y")
+                                                ),
+                                                new Ast.Expression.Access(Optional.empty(), "z")
+                                        ))
+                                )),
+                                new Ast.Function("main", Arrays.asList(), Arrays.asList(
+                                        new Ast.Statement.Declaration("y", Optional.of(new Ast.Expression.Literal(BigInteger.valueOf(4)))),
+                                        new Ast.Statement.Return(new Ast.Expression.Function("f", Arrays.asList(new Ast.Expression.Literal(BigInteger.valueOf(5)))))
+                                ))
+                        )
+                ), BigInteger.valueOf(8))
         );
     }
 
@@ -382,10 +414,26 @@ final class InterpreterTests {
                 // 1 ^ 2147483648
                 Arguments.of("Exponent 2",
                         new Ast.Expression.Binary("^",
-                                new Ast.Expression.Literal(BigInteger.valueOf(1)),
+                                new Ast.Expression.Literal(BigInteger.ONE),
                                 new Ast.Expression.Literal(BigInteger.valueOf(2147483648L))
                         ),
                         BigInteger.valueOf(1)
+                ),
+                // 1 / 0
+                Arguments.of("Divide By Zero",
+                        new Ast.Expression.Binary("/",
+                                new Ast.Expression.Literal(BigInteger.ONE),
+                                new Ast.Expression.Literal(BigInteger.ZERO)
+                        ),
+                        null
+                ),
+                // 1 + "10"
+                Arguments.of("RHS String",
+                        new Ast.Expression.Binary("+",
+                                new Ast.Expression.Literal(BigInteger.ONE),
+                                new Ast.Expression.Literal("10")
+                        ),
+                        "110"
                 )
         );
     }
@@ -459,8 +507,8 @@ final class InterpreterTests {
     void testLogarithmExpressionStatement() {
         Scope scope = new Scope(null);
         test(new Ast.Expression.Function(
-                "logarithm",
-                Arrays.asList(new Ast.Expression.Literal(BigDecimal.valueOf(Math.E)))
+                    "logarithm",
+                    Arrays.asList(new Ast.Expression.Literal(BigDecimal.valueOf(Math.E)))
                 ),
                 BigDecimal.valueOf(1.0),
                 scope
@@ -472,7 +520,7 @@ final class InterpreterTests {
         Scope scope = new Scope(null);
         test(new Ast.Expression.Function(
                         "logarithm",
-                        Arrays.asList(new Ast.Expression.Literal(BigDecimal.valueOf(3)))
+                        Arrays.asList(new Ast.Expression.Literal(BigInteger.valueOf(3)))
                 ),
                 null,
                 scope
