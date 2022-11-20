@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed exponent operation in Interpreter.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed binary expressions and function scope in Interpreter.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Scope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Scope.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -266,7 +267,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667711495020</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Fixed binary expressions and function scope in Interpreter.">
+      <created>1668917828739</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1668917828739</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -323,6 +331,7 @@
     <MESSAGE value="Updated Ast and added new files for the Interpreter." />
     <MESSAGE value="Implemented Interpreter." />
     <MESSAGE value="Fixed exponent operation in Interpreter." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed exponent operation in Interpreter." />
+    <MESSAGE value="Fixed binary expressions and function scope in Interpreter." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed binary expressions and function scope in Interpreter." />
   </component>
 </project>
