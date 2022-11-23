@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed binary expressions and function scope in Interpreter.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Updated Ast, Environment, and Scope. Added new files for the Analyzer.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Scope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Scope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +61,8 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.InterpreterTests">
-    <configuration name="InterpreterTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.AnalyzerTests">
+    <configuration name="AnalyzerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -73,13 +71,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AnalyzerTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -88,14 +86,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,plc.project.Ast,java.lang.Object)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
+      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,plc.project.Ast$Statement$Declaration,plc.project.Ast$Statement$Declaration)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testLogarithmExpressionError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AnalyzerTests.testFunctionExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -104,14 +102,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testLogarithmExpressionError" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
+      <option name="METHOD_NAME" value="testFunctionExpression(java.lang.String,plc.project.Ast$Expression$Function,plc.project.Ast$Expression$Function)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testLogarithmExpressionStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AnalyzerTests.testGlobal" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -120,14 +118,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testLogarithmExpressionStatement" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
+      <option name="METHOD_NAME" value="testGlobal(java.lang.String,plc.project.Ast$Global,plc.project.Ast$Global)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AnalyzerTests.testRequireAssignable" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -136,8 +134,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testSource(java.lang.String,plc.project.Ast$Source,java.lang.Object)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
+      <option name="METHOD_NAME" value="testRequireAssignable(java.lang.String,plc.project.Environment$Type,plc.project.Environment$Type,boolean)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -145,11 +143,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.InterpreterTests" />
-        <item itemvalue="JUnit.InterpreterTests.testSource" />
-        <item itemvalue="JUnit.InterpreterTests.testBinaryExpression" />
-        <item itemvalue="JUnit.InterpreterTests.testLogarithmExpressionError" />
-        <item itemvalue="JUnit.InterpreterTests.testLogarithmExpressionStatement" />
+        <item itemvalue="JUnit.AnalyzerTests" />
+        <item itemvalue="JUnit.AnalyzerTests.testGlobal" />
+        <item itemvalue="JUnit.AnalyzerTests.testDeclarationStatement" />
+        <item itemvalue="JUnit.AnalyzerTests.testFunctionExpression" />
+        <item itemvalue="JUnit.AnalyzerTests.testRequireAssignable" />
       </list>
     </recent_temporary>
   </component>
@@ -274,7 +272,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668917828739</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Updated Ast, Environment, and Scope. Added new files for the Analyzer.">
+      <created>1668920402700</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1668920402700</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -332,6 +337,7 @@
     <MESSAGE value="Implemented Interpreter." />
     <MESSAGE value="Fixed exponent operation in Interpreter." />
     <MESSAGE value="Fixed binary expressions and function scope in Interpreter." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed binary expressions and function scope in Interpreter." />
+    <MESSAGE value="Updated Ast, Environment, and Scope. Added new files for the Analyzer." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Ast, Environment, and Scope. Added new files for the Analyzer." />
   </component>
 </project>
