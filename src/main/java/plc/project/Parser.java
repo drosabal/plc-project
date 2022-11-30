@@ -75,6 +75,13 @@ public final class Parser {
             throwParseException("Invalid list.");
         }
         String name = tokens.get(-1).getLiteral();
+        if (!match(":")) {
+            throwParseException("Invalid list.");
+        }
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid list.");
+        }
+        String typeName = tokens.get(-1).getLiteral();
         if (!match("=")) {
             throwParseException("Invalid list.");
         }
@@ -88,7 +95,7 @@ public final class Parser {
         if (!match("]")) {
             throwParseException("Invalid list.");
         }
-        return new Ast.Global(name, true, Optional.of(new Ast.Expression.PlcList(values)));
+        return new Ast.Global(name, typeName, true, Optional.of(new Ast.Expression.PlcList(values)));
     }
 
     /**
@@ -101,10 +108,17 @@ public final class Parser {
             throwParseException("Invalid mutable.");
         }
         String name = tokens.get(-1).getLiteral();
+        if (!match(":")) {
+            throwParseException("Invalid mutable.");
+        }
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid mutable.");
+        }
+        String typeName = tokens.get(-1).getLiteral();
         if (match("=")) {
-            mutable = new Ast.Global(name, true, Optional.of(parseExpression()));
+            mutable = new Ast.Global(name, typeName, true, Optional.of(parseExpression()));
         } else {
-            mutable = new Ast.Global(name, true, Optional.empty());
+            mutable = new Ast.Global(name, typeName, true, Optional.empty());
         }
         return mutable;
     }
@@ -118,10 +132,17 @@ public final class Parser {
             throwParseException("Invalid immutable.");
         }
         String name = tokens.get(-1).getLiteral();
+        if (!match(":")) {
+            throwParseException("Invalid immutable.");
+        }
+        if (!match(Token.Type.IDENTIFIER)) {
+            throwParseException("Invalid immutable.");
+        }
+        String typeName = tokens.get(-1).getLiteral();
         if (!match("=")) {
             throwParseException("Invalid immutable.");
         }
-        return new Ast.Global(name, false, Optional.of(parseExpression()));
+        return new Ast.Global(name, typeName, false, Optional.of(parseExpression()));
     }
 
     /**
@@ -130,6 +151,8 @@ public final class Parser {
      */
     public Ast.Function parseFunction() throws ParseException {
         List<String> parameters = new ArrayList<>();
+        List<String> parameterTypeNames = new ArrayList<>();
+        Optional<String> returnTypeName = Optional.empty();
         List<Ast.Statement> statements;
         if (!match(Token.Type.IDENTIFIER)) {
             throwParseException("Invalid function.");
@@ -140,15 +163,35 @@ public final class Parser {
         }
         if (match(Token.Type.IDENTIFIER)) {
             parameters.add(tokens.get(-1).getLiteral());
+            if (!match(":")) {
+                throwParseException("Invalid function.");
+            }
+            if (!match(Token.Type.IDENTIFIER)) {
+                throwParseException("Invalid function.");
+            }
+            parameterTypeNames.add(tokens.get(-1).getLiteral());
             while (match(",")) {
                 if (!match(Token.Type.IDENTIFIER)) {
                     throwParseException("Invalid function.");
                 }
                 parameters.add(tokens.get(-1).getLiteral());
+                if (!match(":")) {
+                    throwParseException("Invalid function.");
+                }
+                if (!match(Token.Type.IDENTIFIER)) {
+                    throwParseException("Invalid function.");
+                }
+                parameterTypeNames.add(tokens.get(-1).getLiteral());
             }
         }
         if (!match(")")) {
             throwParseException("Invalid function.");
+        }
+        if (match(":")) {
+            if (!match(Token.Type.IDENTIFIER)) {
+                throwParseException("Invalid function.");
+            }
+            returnTypeName = Optional.of(tokens.get(-1).getLiteral());
         }
         if (!match("DO")) {
             throwParseException("Invalid function.");
@@ -157,7 +200,7 @@ public final class Parser {
         if (!match("END")) {
             throwParseException("Invalid function.");
         }
-        return new Ast.Function(name, parameters, statements);
+        return new Ast.Function(name, parameters, parameterTypeNames, returnTypeName, statements);
     }
 
     /**
@@ -210,14 +253,21 @@ public final class Parser {
      */
     public Ast.Statement.Declaration parseDeclarationStatement() throws ParseException {
         Ast.Statement.Declaration declarationStatement;
+        Optional<String> typeName = Optional.empty();
         if (!match(Token.Type.IDENTIFIER)) {
             throwParseException("Invalid declaration statement.");
         }
         String name = tokens.get(-1).getLiteral();
+        if (match(":")) {
+            if (!match(Token.Type.IDENTIFIER)) {
+                throwParseException("Invalid declaration statement.");
+            }
+            typeName = Optional.of(tokens.get(-1).getLiteral());
+        }
         if (match("=")) {
-            declarationStatement = new Ast.Statement.Declaration(name, Optional.of(parseExpression()));
+            declarationStatement = new Ast.Statement.Declaration(name, typeName, Optional.of(parseExpression()));
         } else {
-            declarationStatement = new Ast.Statement.Declaration(name, Optional.empty());
+            declarationStatement = new Ast.Statement.Declaration(name, typeName, Optional.empty());
         }
         if (!match(";")) {
             throwParseException("Invalid declaration statement.");
