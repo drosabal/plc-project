@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Implemented Analyzer.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Updated Parser to include types.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -286,7 +285,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669166006449</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Updated Parser to include types.">
+      <created>1669840280329</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1669840280329</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -346,6 +352,7 @@
     <MESSAGE value="Fixed binary expressions and function scope in Interpreter." />
     <MESSAGE value="Updated Ast, Environment, and Scope. Added new files for the Analyzer." />
     <MESSAGE value="Implemented Analyzer." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Analyzer." />
+    <MESSAGE value="Updated Parser to include types." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Parser to include types." />
   </component>
 </project>
