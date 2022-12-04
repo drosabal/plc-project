@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Updated Parser to include types.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Added Generator and GeneratorTests.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,20 +50,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
-  <component name="RunManager" selected="JUnit.ParserTests2">
-    <configuration name="AnalyzerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+}]]></component>
+  <component name="RunManager" selected="JUnit.GeneratorTests">
+    <configuration name="GeneratorTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -71,13 +72,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AnalyzerTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneratorTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -86,14 +87,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
-      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,plc.project.Ast$Statement$Declaration,plc.project.Ast$Statement$Declaration)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,plc.project.Ast$Expression$Binary,java.lang.String)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AnalyzerTests.testFunctionExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneratorTests.testFunctionExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -102,14 +103,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
-      <option name="METHOD_NAME" value="testFunctionExpression(java.lang.String,plc.project.Ast$Expression$Function,plc.project.Ast$Expression$Function)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testFunctionExpression(java.lang.String,plc.project.Ast$Expression$Function,java.lang.String)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AnalyzerTests.testGlobal" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneratorTests.testList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -118,14 +119,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
-      <option name="METHOD_NAME" value="testGlobal(java.lang.String,plc.project.Ast$Global,plc.project.Ast$Global)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testList" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneratorTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -134,19 +135,20 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests2" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testSource(java.lang.String,plc.project.Ast$Source,java.lang.String)" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ParserTests2" />
-        <item itemvalue="JUnit.AnalyzerTests" />
-        <item itemvalue="JUnit.AnalyzerTests.testGlobal" />
-        <item itemvalue="JUnit.AnalyzerTests.testDeclarationStatement" />
-        <item itemvalue="JUnit.AnalyzerTests.testFunctionExpression" />
+        <item itemvalue="JUnit.GeneratorTests" />
+        <item itemvalue="JUnit.GeneratorTests.testList" />
+        <item itemvalue="JUnit.GeneratorTests.testFunctionExpression" />
+        <item itemvalue="JUnit.GeneratorTests.testBinaryExpression" />
+        <item itemvalue="JUnit.GeneratorTests.testSource" />
       </list>
     </recent_temporary>
   </component>
@@ -292,7 +294,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669840280329</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Added Generator and GeneratorTests.">
+      <created>1669841640076</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1669841640076</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -353,6 +362,7 @@
     <MESSAGE value="Updated Ast, Environment, and Scope. Added new files for the Analyzer." />
     <MESSAGE value="Implemented Analyzer." />
     <MESSAGE value="Updated Parser to include types." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Parser to include types." />
+    <MESSAGE value="Added Generator and GeneratorTests." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Generator and GeneratorTests." />
   </component>
 </project>

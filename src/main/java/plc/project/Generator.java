@@ -1,6 +1,7 @@
 package plc.project;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 public final class Generator implements Ast.Visitor<Void> {
 
@@ -30,87 +31,239 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Source ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("public class Main {");
+        newline(0);
+        ++indent;
+
+        if (ast.getGlobals().size() > 0) {
+            for (Ast.Global global : ast.getGlobals()) {
+                newline(indent);
+                print(global);
+            }
+            newline(0);
+        }
+
+        newline(indent);
+        print("public static void main(String[] args) {");
+        newline(++indent);
+        print("System.exit(new Main().main());");
+        newline(--indent);
+        print("}");
+        newline(0);
+
+        for (Ast.Function function : ast.getFunctions()) {
+            newline(indent);
+            print(function);
+            newline(0);
+        }
+
+        newline(--indent);
+        print("}");
+
+        return null;
     }
 
     @Override
     public Void visit(Ast.Global ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (!ast.getMutable()) {
+            print("final ");
+        }
+        print(ast.getVariable().getType().getJvmName());
+        if (ast.getVariable().getValue().getValue() instanceof List) {
+            print("[] ");
+        } else {
+            print(" ");
+        }
+        print(ast.getVariable().getJvmName());
+        if (ast.getValue().isPresent()) {
+            print(" = ", ast.getValue().get());
+        }
+        print(";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getFunction().getReturnType().getJvmName(), " ", ast.getFunction().getJvmName(), "(");
+        for (int i = 0; i < ast.getFunction().getArity(); i++) {
+            print(ast.getFunction().getParameterTypes().get(i).getJvmName(), " ", ast.getParameters().get(i));
+            if (i != ast.getFunction().getArity() - 1) {
+                print(", ");
+            }
+        }
+        print(") {");
+        if (!ast.getStatements().isEmpty()) {
+            ++indent;
+            for (Ast.Statement stmt : ast.getStatements()) {
+                newline(indent);
+                print(stmt);
+            }
+            newline(--indent);
+        }
+        print("}");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Expression ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getExpression(), ";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Declaration ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getVariable().getType().getJvmName(), " ", ast.getVariable().getJvmName());
+        if (ast.getValue().isPresent()) {
+            print(" = ", ast.getValue().get());
+        }
+        print(";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Assignment ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getReceiver(), " = ", ast.getValue(), ";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.If ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("if (", ast.getCondition(), ") {");
+        ++indent;
+        for (Ast.Statement stmt : ast.getThenStatements()) {
+            newline(indent);
+            print(stmt);
+        }
+        newline(--indent);
+        print("}");
+        if (!ast.getElseStatements().isEmpty()) {
+            print(" else {");
+            ++indent;
+            for (Ast.Statement stmt : ast.getElseStatements()) {
+                newline(indent);
+                print(stmt);
+            }
+            newline(--indent);
+            print("}");
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("switch (", ast.getCondition(), ") {");
+        ++indent;
+        for (Ast.Statement.Case c : ast.getCases()) {
+            newline(indent);
+            print(c);
+        }
+        newline(--indent);
+        print("}");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Case ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (ast.getValue().isPresent()) {
+            print("case ", ast.getValue().get(), ":");
+        } else {
+            print("default:");
+        }
+        ++indent;
+        for (Ast.Statement stmt : ast.getStatements()) {
+            newline(indent);
+            print(stmt);
+        }
+        if (ast.getValue().isPresent()) {
+            newline(indent);
+            print("break;");
+        }
+        --indent;
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.While ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("while (", ast.getCondition(), ") {");
+        if (!ast.getStatements().isEmpty()) {
+            ++indent;
+            for (Ast.Statement stmt : ast.getStatements()) {
+                newline(indent);
+                print(stmt);
+            }
+            newline(--indent);
+        }
+        print("}");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("return ", ast.getValue(), ";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (ast.getLiteral() instanceof Character) {
+            print("'", ast.getLiteral(), "'");
+        } else if (ast.getLiteral() instanceof String) {
+            print("\"", ast.getLiteral(), "\"");
+        } else {
+            print(ast.getLiteral());
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Group ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("(", ast.getExpression(), ")");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Binary ast) {
-        throw new UnsupportedOperationException(); //TODO
+        if (ast.getOperator().equals("^")) {
+            print("Math.pow(", ast.getLeft(), ", ", ast.getRight(), ")");
+        } else {
+            print(ast.getLeft(), " ", ast.getOperator(), " ", ast.getRight());
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Access ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getVariable().getJvmName());
+        if (ast.getOffset().isPresent()) {
+            print("[", ast.getOffset().get(), "]");
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getFunction().getJvmName(), "(");
+        for (int i = 0; i < ast.getArguments().size(); i++) {
+            print(ast.getArguments().get(i));
+            if (i != ast.getArguments().size() - 1) {
+                print(", ");
+            }
+        }
+        print(")");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.PlcList ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print("{");
+        for (int i = 0; i < ast.getValues().size(); i++){
+            print(ast.getValues().get(i));
+            if (i != ast.getValues().size() - 1) {
+                print(", ");
+            }
+        }
+        print("}");
+        return null;
     }
 
 }
