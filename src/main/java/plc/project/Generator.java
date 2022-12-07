@@ -1,7 +1,6 @@
 package plc.project;
 
 import java.io.PrintWriter;
-import java.util.List;
 
 public final class Generator implements Ast.Visitor<Void> {
 
@@ -69,12 +68,10 @@ public final class Generator implements Ast.Visitor<Void> {
             print("final ");
         }
         print(ast.getVariable().getType().getJvmName());
-        if (ast.getVariable().getValue().getValue() instanceof List) {
-            print("[] ");
-        } else {
-            print(" ");
+        if (ast.getValue().isPresent() && ast.getValue().get() instanceof Ast.Expression.PlcList) {
+            print("[]");
         }
-        print(ast.getVariable().getJvmName());
+        print(" ", ast.getVariable().getJvmName());
         if (ast.getValue().isPresent()) {
             print(" = ", ast.getValue().get());
         }

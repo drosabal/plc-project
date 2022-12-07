@@ -55,12 +55,45 @@ public class GeneratorTests {
                                 "",
                                 "}"
                         )
+                ),
+                Arguments.of("Example 1",
+                        // LIST nums: Integer = [1, 2, 3];
+                        // FUN main(): Integer DO
+                        //     print("Hello, World!");
+                        //     RETURN 0;
+                        // END
+                        new Ast.Source(
+                                Arrays.asList(init(new Ast.Global("nums", "Integer", true, Optional.of(new Ast.Expression.PlcList(Arrays.asList(new Ast.Expression.Literal(new BigInteger("1")), new Ast.Expression.Literal(new BigInteger("2")), new Ast.Expression.Literal(new BigInteger("3")))))),
+                                        ast -> ast.setVariable(new Environment.Variable("nums", "nums", Environment.Type.INTEGER, true, Environment.create(Arrays.asList(new Integer(1), new Integer(2), new Integer(3))))))),
+                                Arrays.asList(init(new Ast.Function("main", Arrays.asList(), Arrays.asList(), Optional.of("Integer"), Arrays.asList(
+                                        new Ast.Statement.Expression(init(new Ast.Expression.Function("print", Arrays.asList(
+                                                init(new Ast.Expression.Literal("Hello, World!"), ast -> ast.setType(Environment.Type.STRING))
+                                        )), ast -> ast.setFunction(new Environment.Function("print", "System.out.println", Arrays.asList(Environment.Type.ANY), Environment.Type.NIL, args -> Environment.NIL)))),
+                                        new Ast.Statement.Return(init(new Ast.Expression.Literal(BigInteger.ZERO), ast -> ast.setType(Environment.Type.INTEGER)))
+                                )), ast -> ast.setFunction(new Environment.Function("main", "main", Arrays.asList(), Environment.Type.INTEGER, args -> Environment.NIL))))
+                        ),
+                        String.join(System.lineSeparator(),
+                                "public class Main {",
+                                "",
+                                "    int[] nums = {1, 2, 3};",
+                                "",
+                                "    public static void main(String[] args) {",
+                                "        System.exit(new Main().main());",
+                                "    }",
+                                "",
+                                "    int main() {",
+                                "        System.out.println(\"Hello, World!\");",
+                                "        return 0;",
+                                "    }",
+                                "",
+                                "}"
+                        )
                 )
         );
     }
 
     @Test
-    void testList() {
+    void testList1() {
         // LIST list: Decimal = [1.0, 1.5, 2.0];
         Ast.Expression.Literal expr1 = new Ast.Expression.Literal(new BigDecimal("1.0"));
         Ast.Expression.Literal expr2 = new Ast.Expression.Literal(new BigDecimal("1.5"));
@@ -73,6 +106,23 @@ public class GeneratorTests {
         Ast.Global astList = init(global, ast -> ast.setVariable(new Environment.Variable("list", "list", Environment.Type.DECIMAL, true, Environment.create(Arrays.asList(new Double(1.0), new Double(1.5), new Double(2.0))))));
 
         String expected = new String("double[] list = {1.0, 1.5, 2.0};");
+        test(astList, expected);
+    }
+
+    @Test
+    void testList2() {
+        // LIST nums: Integer = [1, 2, 3];
+        Ast.Expression.Literal expr1 = new Ast.Expression.Literal(new BigInteger("1"));
+        Ast.Expression.Literal expr2 = new Ast.Expression.Literal(new BigInteger("2"));
+        Ast.Expression.Literal expr3 = new Ast.Expression.Literal(new BigInteger("3"));
+        expr1.setType(Environment.Type.INTEGER);
+        expr2.setType(Environment.Type.INTEGER);
+        expr3.setType(Environment.Type.INTEGER);
+
+        Ast.Global global = new Ast.Global("nums", "Integer", true, Optional.of(new Ast.Expression.PlcList(Arrays.asList(expr1, expr2, expr3))));
+        Ast.Global astList = init(global, ast -> ast.setVariable(new Environment.Variable("nums", "nums", Environment.Type.INTEGER, true, Environment.create(Arrays.asList(new Integer(1), new Integer(2), new Integer(3))))));
+
+        String expected = new String("int[] nums = {1, 2, 3};");
         test(astList, expected);
     }
 
