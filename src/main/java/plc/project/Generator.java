@@ -202,7 +202,9 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
-        if (ast.getLiteral() instanceof Character) {
+        if (ast.getLiteral() == null) {
+            print("null");
+        } else if (ast.getLiteral() instanceof Character) {
             print("'", ast.getLiteral(), "'");
         } else if (ast.getLiteral() instanceof String) {
             print("\"", ast.getLiteral(), "\"");

@@ -145,6 +145,18 @@ public class GeneratorTests {
                                 init(new Ast.Expression.Literal(new BigDecimal("1.0")),ast -> ast.setType(Environment.Type.DECIMAL))
                         )), ast -> ast.setVariable(new Environment.Variable("name", "name", Environment.Type.DECIMAL, true, Environment.NIL))),
                         "double name = 1.0;"
+                ),
+                Arguments.of("Nil Declaration",
+                        // LET name: Nil;
+                        init(new Ast.Statement.Declaration("name", Optional.of("Nil"), Optional.empty()), ast -> ast.setVariable(new Environment.Variable("name", "name", Environment.Type.NIL, true, Environment.NIL))),
+                        "Void name;"
+                ),
+                Arguments.of("Nil Initialization",
+                        // LET name: Nil = NIL;
+                        init(new Ast.Statement.Declaration("name", Optional.of("Nil"), Optional.of(
+                                init(new Ast.Expression.Literal(null),ast -> ast.setType(Environment.Type.NIL))
+                        )), ast -> ast.setVariable(new Environment.Variable("name", "name", Environment.Type.NIL, true, Environment.NIL))),
+                        "Void name = null;"
                 )
         );
     }

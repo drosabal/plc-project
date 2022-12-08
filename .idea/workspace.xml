@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Implemented Generator.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed list initialization in Generator.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" afterDir="false" />
@@ -79,7 +79,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GeneratorTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneratorTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
         <pattern>
@@ -89,7 +89,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
-      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,plc.project.Ast$Expression$Binary,java.lang.String)" />
+      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,plc.project.Ast$Statement$Declaration,java.lang.String)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -146,10 +146,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.GeneratorTests" />
+        <item itemvalue="JUnit.GeneratorTests.testDeclarationStatement" />
         <item itemvalue="JUnit.GeneratorTests.testSource" />
         <item itemvalue="JUnit.GeneratorTests.testList" />
         <item itemvalue="JUnit.GeneratorTests.testFunctionExpression" />
-        <item itemvalue="JUnit.GeneratorTests.testBinaryExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -309,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670112084113</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Fixed list initialization in Generator.">
+      <created>1670384241463</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1670384241463</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -372,6 +379,7 @@
     <MESSAGE value="Updated Parser to include types." />
     <MESSAGE value="Added Generator and GeneratorTests." />
     <MESSAGE value="Implemented Generator." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Generator." />
+    <MESSAGE value="Fixed list initialization in Generator." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed list initialization in Generator." />
   </component>
 </project>
