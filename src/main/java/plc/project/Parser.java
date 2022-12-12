@@ -36,7 +36,7 @@ public final class Parser {
         while(peek("LIST") || peek("VAR") || peek("VAL")) {
             globals.add(parseGlobal());
         }
-        while(match("FUN")) {
+        while(peek("FUN")) {
             functions.add(parseFunction());
         }
         if (tokens.has(0)) {
@@ -154,6 +154,7 @@ public final class Parser {
         List<String> parameterTypeNames = new ArrayList<>();
         Optional<String> returnTypeName = Optional.empty();
         List<Ast.Statement> statements;
+        match("FUN");
         if (!match(Token.Type.IDENTIFIER)) {
             throwParseException("Invalid function.");
         }

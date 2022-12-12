@@ -76,6 +76,70 @@ final class ParserTests2 {
 
     @ParameterizedTest
     @MethodSource
+    void testFunction(String test, List<Token> tokens, Ast.Function expected) {
+        test(tokens, expected, Parser::parseFunction);
+    }
+
+    private static Stream<Arguments> testFunction() {
+        return Stream.of(
+                Arguments.of("Baseline Function",
+                        Arrays.asList(
+                                //FUN name() DO stmt; END
+                                new Token(Token.Type.IDENTIFIER, "FUN", 0),
+                                new Token(Token.Type.IDENTIFIER, "name", 4),
+                                new Token(Token.Type.OPERATOR, "(", 8),
+                                new Token(Token.Type.OPERATOR, ")", 9),
+                                new Token(Token.Type.IDENTIFIER, "DO", 11),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 14),
+                                new Token(Token.Type.OPERATOR, ";", 18),
+                                new Token(Token.Type.IDENTIFIER, "END", 20)
+                        ),
+                        new Ast.Function("name", Arrays.asList(), Arrays.asList(), Optional.empty(), Arrays.asList(
+                                new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
+                        ))
+                ),
+                Arguments.of("Argument Type",
+                        Arrays.asList(
+                                //FUN name(arg: Type) DO stmt; END
+                                new Token(Token.Type.IDENTIFIER, "FUN", 0),
+                                new Token(Token.Type.IDENTIFIER, "name", 4),
+                                new Token(Token.Type.OPERATOR, "(", 8),
+                                new Token(Token.Type.IDENTIFIER, "arg", 9),
+                                new Token(Token.Type.OPERATOR, ":", 12),
+                                new Token(Token.Type.IDENTIFIER, "Type", 14),
+                                new Token(Token.Type.OPERATOR, ")", 18),
+                                new Token(Token.Type.IDENTIFIER, "DO", 20),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 23),
+                                new Token(Token.Type.OPERATOR, ";", 27),
+                                new Token(Token.Type.IDENTIFIER, "END", 29)
+                        ),
+                        new Ast.Function("name", Arrays.asList("arg"), Arrays.asList("Type"), Optional.empty(), Arrays.asList(
+                                new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
+                        ))
+                ),
+                Arguments.of("Explicit Return Type",
+                        Arrays.asList(
+                                //FUN name(): Type DO stmt; END
+                                new Token(Token.Type.IDENTIFIER, "FUN", 0),
+                                new Token(Token.Type.IDENTIFIER, "name", 4),
+                                new Token(Token.Type.OPERATOR, "(", 8),
+                                new Token(Token.Type.OPERATOR, ")", 9),
+                                new Token(Token.Type.OPERATOR, ":", 10),
+                                new Token(Token.Type.IDENTIFIER, "Type", 12),
+                                new Token(Token.Type.IDENTIFIER, "DO", 17),
+                                new Token(Token.Type.IDENTIFIER, "stmt", 20),
+                                new Token(Token.Type.OPERATOR, ";", 24),
+                                new Token(Token.Type.IDENTIFIER, "END", 26)
+                        ),
+                        new Ast.Function("name", Arrays.asList(), Arrays.asList(), Optional.of("Type"), Arrays.asList(
+                                new Ast.Statement.Expression(new Ast.Expression.Access(Optional.empty(), "stmt"))
+                        ))
+                )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
     void testExpressionStatement(String test, List<Token> tokens, Ast.Statement.Expression expected) {
         test(tokens, expected, Parser::parseStatement);
     }
