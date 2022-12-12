@@ -196,6 +196,11 @@ public class LexerTests {
 
                         //END
                         new Token(Token.Type.IDENTIFIER, "END", 165)
+                )),
+                Arguments.of("Example 4", "\'\"\'string\"\'\"", Arrays.asList(
+                        new Token(Token.Type.CHARACTER, "\'\"\'", 0),
+                        new Token(Token.Type.IDENTIFIER, "string", 3),
+                        new Token(Token.Type.STRING, "\"\'\"", 9)
                 ))
         );
     }

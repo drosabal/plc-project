@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed list initialization in Generator.">
+    <list default="true" id="0b412e81-1d3e-45c5-affd-a5c3c77aa316" name="Changes" comment="Fixed nil literal expressions in Generator.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +63,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.GeneratorTests">
+  <component name="RunManager" selected="JUnit.LexerTests">
     <configuration name="GeneratorTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
@@ -95,38 +95,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GeneratorTests.testFunctionExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="plc-project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
-      <option name="METHOD_NAME" value="testFunctionExpression(java.lang.String,plc.project.Ast$Expression$Function,java.lang.String)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GeneratorTests.testList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="plc-project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
-      <option name="METHOD_NAME" value="testList" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="GeneratorTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="plc-project.test" />
       <extension name="coverage">
@@ -143,13 +111,44 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="LexerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="plc-project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LexerTests.testExamples" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="plc-project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
+      <option name="METHOD_NAME" value="testExamples(java.lang.String,java.lang.String,java.util.List)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.LexerTests" />
+        <item itemvalue="JUnit.LexerTests.testExamples" />
         <item itemvalue="JUnit.GeneratorTests" />
         <item itemvalue="JUnit.GeneratorTests.testDeclarationStatement" />
         <item itemvalue="JUnit.GeneratorTests.testSource" />
-        <item itemvalue="JUnit.GeneratorTests.testList" />
-        <item itemvalue="JUnit.GeneratorTests.testFunctionExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -316,7 +315,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670384241463</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Fixed nil literal expressions in Generator.">
+      <created>1670463039741</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1670463039741</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -380,6 +386,7 @@
     <MESSAGE value="Added Generator and GeneratorTests." />
     <MESSAGE value="Implemented Generator." />
     <MESSAGE value="Fixed list initialization in Generator." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed list initialization in Generator." />
+    <MESSAGE value="Fixed nil literal expressions in Generator." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed nil literal expressions in Generator." />
   </component>
 </project>

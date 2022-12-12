@@ -110,7 +110,7 @@ public final class Lexer {
                 return chars.emit(Token.Type.STRING);
             } else if (match("\\\\")) {
                 lexEscape();
-            } else if (!match("[^'\\n\\r\\\\]")) {
+            } else if (!match("[^\\n\\r\\\\]")) {
                 throw new ParseException("Invalid string.", chars.index);
             }
         }
